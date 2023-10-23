@@ -1,76 +1,123 @@
-import 'dart:convert';
+// ignore_for_file: constant_identifier_names
+
+enum ContactType {
+  USER,
+  CHANNEL,
+  GROUP,
+  GATEWAY,
+  UNKNOWN,
+  CONVERSATION;
+
+  static fromMap(String? name) {
+    if (name == null) return ContactType.UNKNOWN;
+    return values.firstWhere(
+      (e) => e.name == name,
+    );
+  }
+}
+
+enum ContactStatus {
+  OFFLINE,
+  AVAILABLE,
+  BUSY,
+  STANDBY,
+  CONNECTING;
+
+  static fromMap(String name) => values.firstWhere(
+        (e) => e.name == name,
+      );
+}
 
 class Contact {
-  final String name;
-  final String displayName;
-  final String status;
-  final bool muted;
+  String? name;
+  String? fullName;
+  String? displayName;
+  ContactType type;
+  ContactStatus status;
+  String? statusMessage;
+  int usersCount;
+  int usersTotal;
+  String? title;
+  bool muted;
+  bool noDisconnect;
+
   Contact({
-    required this.name,
-    required this.displayName,
-    required this.status,
-    required this.muted,
+    this.name,
+    this.fullName,
+    this.displayName,
+    this.type = ContactType.USER,
+    this.status = ContactStatus.OFFLINE,
+    this.statusMessage,
+    this.usersCount = 0,
+    this.usersTotal = 0,
+    this.title,
+    this.muted = false,
+    this.noDisconnect = false,
   });
-  // Add other properties here
 
+  void reset() {
+    name = null;
+    fullName = null;
+    displayName = null;
+    type = ContactType.USER;
+    status = ContactStatus.OFFLINE;
+    statusMessage = null;
+    usersCount = 0;
+    usersTotal = 0;
+    title = null;
+    muted = false;
+    noDisconnect = false;
+  }
 
-  Contact copyWith({
-    String? name,
-    String? displayName,
-    String? status,
-    bool? muted,
-  }) {
+  Contact clone() {
     return Contact(
-      name: name ?? this.name,
-      displayName: displayName ?? this.displayName,
-      status: status ?? this.status,
-      muted: muted ?? this.muted,
+      name: name,
+      fullName: fullName,
+      displayName: displayName,
+      type: type,
+      status: status,
+      statusMessage: statusMessage,
+      usersCount: usersCount,
+      usersTotal: usersTotal,
+      title: title,
+      muted: muted,
+      noDisconnect: noDisconnect,
     );
+  }
+
+  bool isValid() {
+    return name != null && name!.isNotEmpty;
   }
 
   Map<String, dynamic> toMap() {
     return {
       'name': name,
+      'fullName': fullName,
       'displayName': displayName,
-      'status': status,
+      'type': type.name,
+      'status': status.name,
+      'statusMessage': statusMessage,
+      'usersCount': usersCount,
+      'usersTotal': usersTotal,
+      'title': title,
       'muted': muted,
+      'noDisconnect': noDisconnect,
     };
   }
 
   factory Contact.fromMap(Map<String, dynamic> map) {
     return Contact(
-      name: map['name'] ?? '',
-      displayName: map['displayName'] ?? '',
-      status: map['status'] ?? '',
-      muted: map['muted'] ?? false,
+      name: map['name'],
+      fullName: map['fullName'].toString(),
+      displayName: map['displayName'],
+      type: ContactType.fromMap(map['type']),
+      status: ContactStatus.fromMap(map['status']),
+      statusMessage: map['statusMessage'],
+      usersCount: map['usersCount'] ?? 0,
+      usersTotal: map['usersTotal'],
+      title: map['title'],
+      muted: map['muted'],
+      noDisconnect: map['noDisconnect'],
     );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory Contact.fromJson(String source) => Contact.fromMap(json.decode(source));
-
-  @override
-  String toString() {
-    return 'Contact(name: $name, displayName: $displayName, status: $status, muted: $muted)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-  
-    return other is Contact &&
-      other.name == name &&
-      other.displayName == displayName &&
-      other.status == status &&
-      other.muted == muted;
-  }
-
-  @override
-  int get hashCode {
-    return name.hashCode ^
-      displayName.hashCode ^
-      status.hashCode ^
-      muted.hashCode;
   }
 }
