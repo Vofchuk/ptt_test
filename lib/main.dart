@@ -34,15 +34,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   ZelloService zelloService = ZelloService();
 
-@override
+  @override
   void initState() {
-   
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +47,9 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
-      ),floatingActionButton: FloatingActionButton(onPressed: (){
-        zelloService.getContacts();
+      ),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        zelloService.connectToChannel("test");
       }),
       body: Center(
           child: GestureDetector(
@@ -63,13 +61,14 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           child: Icon(Icons.mic),
         ),
-        onTapDown: (details) {zelloService.startTalking();},
-        onTapUp: (details) {zelloService.stopTalking();},
+        onTapDown: (details) {
+          zelloService.startTalking();
+        },
+        onTapUp: (details) {
+          zelloService.stopTalking();
+        },
         onPanCancel: () => zelloService.stopTalking(),
-
-        
       )),
-
     );
   }
 }
