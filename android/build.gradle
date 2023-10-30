@@ -3,10 +3,19 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = "https://packages.aliyun.com/maven/repository/2406445-snapshot-qriF2T"
+            credentials {
+                username = "64d62b4abaa497e3eb4a0808"
+                password = ")d1soSDMsCCV"
+            }
+            //To use gradle 7.0 and above, you need to add this line of code
+            allowInsecureProtocol = true
+        }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath 'com.android.tools.build:gradle:8.0.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }

@@ -9,7 +9,6 @@ import com.zello.sdk.Contact
 import com.zello.sdk.MessageIn
 import com.zello.sdk.MessageOut
 import com.zello.sdk.Tab
-import com.zello.sdk.Theme
 import com.zello.sdk.Zello
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -24,6 +23,7 @@ class MainActivity : FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Zello.getInstance().configure(this)
+        val configure: PocEngine.Configure = Configure()
     }
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
@@ -84,12 +84,14 @@ class MainActivity : FlutterActivity() {
                                 override fun onAppStateChanged() {
                                     val appState: AppState = AppState()
                                     Zello.getInstance().getAppState(appState)
-                                    events?.success( mapOf(
-                                        "event" to "appStateChanged",
-                                        "appState" to appStateToMap(
-                                            appState
+                                    events?.success(
+                                        mapOf(
+                                            "event" to "appStateChanged",
+                                            "appState" to appStateToMap(
+                                                appState
+                                            ),
                                         ),
-                                    ),)
+                                    )
                                 }
 
                                 override fun onLastContactsTabChanged(p0: Tab) {
@@ -98,10 +100,12 @@ class MainActivity : FlutterActivity() {
 
                                 override fun onContactsChanged() {
                                     val contacts = getContacts()
-                                    events?.success( mapOf(
-                                        "event" to "contactsChanged",
-                                        "contacts" to contacts,
-                                    ),)
+                                    events?.success(
+                                        mapOf(
+                                            "event" to "contactsChanged",
+                                            "contacts" to contacts,
+                                        ),
+                                    )
 
                                 }
 
